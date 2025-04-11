@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
+import { getIngredients } from '../../services/slices/ingredients-slice/ingredients';
 import {
   ConstructorPage,
   Feed,
@@ -13,14 +14,20 @@ import {
 } from '@pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
+import { useDispatch } from '../../services/store';
+import { useEffect } from 'react';
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const backgroundLocation = location.state?.background;
-
   const closeModal = () => navigate(-1);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>

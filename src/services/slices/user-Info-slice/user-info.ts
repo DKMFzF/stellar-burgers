@@ -1,20 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { 
-  getUserApi, 
-  loginUserApi, 
-  logoutApi, 
-  registerUserApi, 
-  updateUserApi 
+import {
+  getUserApi,
+  loginUserApi,
+  logoutApi,
+  registerUserApi,
+  updateUserApi
 } from '../../../utils/burger-api';
 import { TUser } from '../../../utils/types';
 
-export const checkUserAuth = createAsyncThunk(
-  'user/checkAuth',
-  async () => {
-    const response = await getUserApi();
-    return response.user;
-  }
-);
+export const checkUserAuth = createAsyncThunk('user/checkAuth', async () => {
+  const response = await getUserApi();
+  return response.user;
+});
 
 export const loginUser = createAsyncThunk(
   'user/login',
@@ -40,12 +37,9 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk(
-  'user/logout',
-  async () => {
-    await logoutApi();
-  }
-);
+export const logoutUser = createAsyncThunk('user/logout', async () => {
+  await logoutApi();
+});
 
 interface UserState {
   user: TUser | null;

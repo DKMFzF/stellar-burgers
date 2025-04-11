@@ -11,10 +11,6 @@ export const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
   const location = useLocation();
 
-  // if (!onlyUnAuth) {
-  //   return <Navigate replace to='/login' state={{ from: location }} />;
-  // }
-
   if (onlyUnAuth) {
     const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} />;
