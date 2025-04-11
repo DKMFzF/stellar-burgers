@@ -6,6 +6,7 @@ import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
 import { getIngredientState } from '../../services/slices/ingredients-slice/ingredients';
 import { useSelector } from 'react-redux';
+import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
   const { ingredients, loading, error } = useSelector(getIngredientState);
@@ -50,13 +51,9 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (loading) {
-    return <div>Загрузка...</div>;
-  }
+  if (loading) return <Preloader />;
 
-  if (error) {
-    return <div>Ошибка: {error}</div>;
-  }
+  if (error) return <div>Ошибка: {error}</div>;
 
   return (
     <BurgerIngredientsUI
