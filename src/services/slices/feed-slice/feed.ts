@@ -2,13 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFeedsApi } from '../../../utils/burger-api';
 import { TOrder } from '../../../utils/types';
 
-export const fetchFeeds = createAsyncThunk(
-  'feed/fetchAll',
-  async () => {
-    const response = await getFeedsApi();
-    return response;
-  }
-);
+export const fetchFeeds = createAsyncThunk('feed/fetchAll', async () => {
+  const response = await getFeedsApi();
+  return response;
+});
 
 interface FeedState {
   orders: TOrder[];
