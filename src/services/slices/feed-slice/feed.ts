@@ -1,49 +1,59 @@
+import { getFeedsApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getFeedsApi } from '../../../utils/burger-api';
-import { TOrder } from '../../../utils/types';
+import { TOrder } from '@utils-types';
+import { RootState } from '../../store';
 
-export const fetchFeeds = createAsyncThunk('feed/fetchAll', async () => {
-  const response = await getFeedsApi();
-  return response;
-});
-
-interface FeedState {
+export type TFeedsResponse = {
   orders: TOrder[];
   total: number;
   totalToday: number;
-  isLoading: boolean;
-  error: string | null;
-}
+};
 
-const initialState: FeedState = {
+export type FeedState = {
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+  loading: boolean;
+  error: string | null;
+};
+
+export const initialState: FeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
-  isLoading: false,
+  loading: false,
   error: null
 };
 
-export const feedSlice = createSlice({
+export const getFeeds = createAsyncThunk<TFeedsResponse, void>(
+  'feeds/all',
+  getFeedsApi
+);
+
+const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFeeds.pending, (state) => {
-        state.isLoading = true;
+      .addCase(getFeeds.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
-      .addCase(fetchFeeds.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(getFeeds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message as string;
+      })
+      .addCase(getFeeds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
-      })
-      .addCase(fetchFeeds.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Failed to fetch feeds';
       });
   }
 });
+
+export const getFeedState = (state: RootState): FeedState => state.feed;
 
 export const feedReducer = feedSlice.reducer;
