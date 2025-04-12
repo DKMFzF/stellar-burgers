@@ -30,11 +30,11 @@ export const getRegisterUser = createAsyncThunk(
   async (registerData: TRegisterData) => {
     const data = await registerUserApi(registerData);
     if (!data.success) return data;
-    
+
     setCookie('accessToken', data.accessToken);
-    
+
     localStorage.setItem('refreshToken', data.refreshToken);
-    
+
     return data;
   }
 );
@@ -44,11 +44,11 @@ export const getLoginUser = createAsyncThunk(
   async ({ email, password }: TLoginData) => {
     const data = await loginUserApi({ email, password });
     if (!data.success) return data;
-    
+
     setCookie('accessToken', data.accessToken);
-    
+
     localStorage.setItem('refreshToken', data.refreshToken);
-    
+
     return data;
   }
 );
@@ -179,4 +179,4 @@ export const { userLogout, resetError } = userSlice.actions;
 
 export const getUserState = (state: RootState): TUserState => state.user;
 
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;
