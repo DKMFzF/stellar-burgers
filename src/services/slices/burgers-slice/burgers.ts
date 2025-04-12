@@ -91,7 +91,7 @@ const constructorSlice = createSlice({
       state.orderModalData = null;
     }
   },
-  
+
   extraReducers: (builder) => {
     builder.addCase(getOrderBurger.pending, (state) => {
       state.loading = true;
