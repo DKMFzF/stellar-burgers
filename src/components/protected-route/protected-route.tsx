@@ -17,7 +17,8 @@ export const ProtectedRoute = ({
 
   if (!isAuthChecked) return <Preloader />;
 
-  if (!onlyAuthorized && !isAuthenticated) return <Navigate replace to='/login' state={{ from: location }} />;
+  if (!onlyAuthorized && !isAuthenticated)
+    return <Navigate replace to='/login' state={{ from: location }} />;
 
   if (onlyAuthorized && isAuthenticated) {
     const from = location.state?.from || { pathname: '/' };
