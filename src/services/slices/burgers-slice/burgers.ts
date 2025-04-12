@@ -5,8 +5,8 @@ import {
   nanoid,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
-import ConstructorState from './types';
+import { type TConstructorIngredient, type TIngredient } from '@utils-types';
+import type ConstructorState from './types';
 import { RootState } from '../../store';
 import { orderBurgerApi } from '@api';
 
