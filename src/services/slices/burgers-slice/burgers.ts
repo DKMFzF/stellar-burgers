@@ -6,11 +6,11 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit';
 import { type TConstructorIngredient, type TIngredient } from '@utils-types';
-import type ConstructorState from './type';
+import type TConstructorState from './type';
 import { RootState } from '../../store';
 import { orderBurgerApi } from '@api';
 
-export const initialState: ConstructorState = {
+export const initialState: TConstructorState = {
   constructorItems: {
     bun: null,
     ingredients: []
@@ -116,7 +116,7 @@ const constructorSlice = createSlice({
   }
 });
 
-const constructorSliceSelectors = (state: RootState): ConstructorState =>
+const constructorSliceSelectors = (state: RootState): TConstructorState =>
   state.burders;
 
 export const getConstructorState = createSelector(

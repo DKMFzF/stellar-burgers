@@ -9,23 +9,11 @@ import {
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TOrder, TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie';
+import { deleteCookie, setCookie } from '../../../utils/cookie';
 import { RootState } from '../../store';
+import type TUserState from './type';
 
-export type UserState = {
-  request: boolean;
-  error: string | null;
-  response: TUser | null;
-  registerData: TRegisterData | null;
-  user: TUser | null;
-  userOrders: TOrder[];
-  isAuthChecked: boolean;
-  isAuthenticated: boolean;
-  loginUserRequest: boolean;
-};
-
-export const initialState: UserState = {
+export const initialState: TUserState = {
   request: false,
   error: null,
   response: null,
@@ -187,6 +175,6 @@ export const userSlice = createSlice({
 
 export const { userLogout, resetError } = userSlice.actions;
 
-export const getUserState = (state: RootState): UserState => state.user;
+export const getUserState = (state: RootState): TUserState => state.user;
 
 export default userSlice.reducer;

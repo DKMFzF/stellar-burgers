@@ -1,6 +1,10 @@
-import { TStateBun, TStateError, TStateIngredients, TStateOrderModalData } from "../types";
+import { TConstructorIngredient, TOrder } from '@utils-types';
+import { TStateError } from '../types';
 
-type ConstructorState = {
+export type TStateBun = TConstructorIngredient | null;
+export type TStateIngredients = Array<TConstructorIngredient>;
+export type TStateOrderModalData = TOrder | null;
+type TConstructorState = {
   constructorItems: {
     bun: TStateBun;
     ingredients: TStateIngredients;
@@ -11,4 +15,4 @@ type ConstructorState = {
   error: TStateError;
 };
 
-export default ConstructorState;
+export default TConstructorState;
