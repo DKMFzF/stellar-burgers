@@ -6,6 +6,9 @@ import { TBurgerIngredientProps } from './type';
 import { useDispatch } from 'react-redux';
 import { addIngredientToConstructor } from '../../services/slices/burgers-slice/burgers';
 
+/**
+ * Комопнент для элемента бургера
+ */
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const location = useLocation();
