@@ -16,7 +16,9 @@ export const Feed: FC = () => {
     dispatch(getFeeds());
   }, [dispatch]);
 
+  const wrapperGetFeeds = () => dispatch(getFeeds());
+
   if (loading) return <Preloader />;
 
-  return <FeedUI orders={orders} handleGetFeeds={() => dispatch(getFeeds())} />;
+  return <FeedUI orders={orders} handleGetFeeds={wrapperGetFeeds} />;
 };
