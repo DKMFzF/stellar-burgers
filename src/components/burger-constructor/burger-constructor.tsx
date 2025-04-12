@@ -10,15 +10,22 @@ import {
   resetModal,
   setRequest
 } from '../../services/slices/burgers-slice/burgers';
+import { useNavigate } from 'react-router-dom';
+import { getUserState } from '../../services/slices/user-Info-slice/user-info';
 
 /**
  * Комопнент для конструктора бургеров
  */
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const constructorItems = useSelector(getConstructorState);
+
   const orderRequest = useSelector(getOrderRequest);
+
   const orderModalData = useSelector(getOrderModalData);
+
+  const isAuthenticated = useSelector(getUserState).isAuthenticated;
 
   let arr: string[] = [];
   const ingredients: string[] | void = constructorItems.ingredients.map(
@@ -29,11 +36,13 @@ export const BurgerConstructor: FC = () => {
     arr = [bun, ...ingredients, bun];
   }
   const onOrderClick = () => {
-    if (constructorItems.bun) {
+    if (constructorItems.bun && isAuthenticated) {
       dispatch(setRequest(true));
       dispatch(getOrderBurger(arr));
-    } else if (!constructorItems.bun) {
+    } else if (!constructorItems.bun && isAuthenticated) {
       return;
+    } else if (!isAuthenticated) {
+      navigate('/login');
     }
   };
 
@@ -51,6 +60,7 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
+
   return (
     <BurgerConstructorUI
       price={price}
