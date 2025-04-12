@@ -9,7 +9,7 @@ import { ingredientReducer } from './slices/ingredients-slice/ingredients';
 import { userReducer } from './slices/user-Info-slice/user-info';
 import { feedReducer } from './slices/feed-slice/feed';
 import { orderReducer } from './slices/order-slice/order';
-import constructorReducer from './slices/burgers-slice/burgers';
+import { constructorReducer } from './slices/burgers-slice/burgers';
 
 const rootReducer = combineReducers({
   burders: constructorReducer,

@@ -140,4 +140,4 @@ export const {
   resetModal
 } = constructorSlice.actions;
 
-export default constructorSlice.reducer;
+export const constructorReducer = constructorSlice.reducer;
