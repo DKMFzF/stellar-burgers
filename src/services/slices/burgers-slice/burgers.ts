@@ -5,20 +5,10 @@ import {
   nanoid,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
+import ConstructorState from './types';
 import { RootState } from '../../store';
 import { orderBurgerApi } from '@api';
-
-type ConstructorState = {
-  constructorItems: {
-    bun: TConstructorIngredient | null;
-    ingredients: Array<TConstructorIngredient>;
-  };
-  orderRequest: boolean;
-  orderModalData: TOrder | null;
-  loading: boolean;
-  error: string | null;
-};
 
 export const initialState: ConstructorState = {
   constructorItems: {
@@ -92,13 +82,16 @@ const constructorSlice = createSlice({
       state.constructorItems.ingredients = [];
       state.constructorItems.bun = null;
     },
+
     setRequest: (state, action) => {
       state.orderRequest = action.payload;
     },
+
     resetModal: (state) => {
       state.orderModalData = null;
     }
   },
+  
   extraReducers: (builder) => {
     builder.addCase(getOrderBurger.pending, (state) => {
       state.loading = true;
@@ -119,7 +112,6 @@ const constructorSlice = createSlice({
         bun: null,
         ingredients: []
       };
-      console.log(action.payload);
     });
   }
 });
