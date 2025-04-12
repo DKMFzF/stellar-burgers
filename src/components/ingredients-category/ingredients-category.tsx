@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getConstructorState } from '../../services/slices/burgers-slice/burgers';
 
 /**
- * Компонент для
+ * Компонент для Категории ингридиентов
  */
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
