@@ -10,6 +10,11 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorElement, Modal } from '@components';
 import { Preloader, OrderDetailsUI } from '@ui';
 
+/**
+ * Компонент для правой части main страницы
+ * нужен для отображения выбранных булок, начинок и соусов
+ */
+
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,
   orderRequest,
