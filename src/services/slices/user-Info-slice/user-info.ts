@@ -29,11 +29,12 @@ export const getRegisterUser = createAsyncThunk(
   'users/register',
   async (registerData: TRegisterData) => {
     const data = await registerUserApi(registerData);
-    if (!data.success) {
-      return data;
-    }
+    if (!data.success) return data;
+    
     setCookie('accessToken', data.accessToken);
+    
     localStorage.setItem('refreshToken', data.refreshToken);
+    
     return data;
   }
 );
@@ -42,11 +43,12 @@ export const getLoginUser = createAsyncThunk(
   'user/loginUser',
   async ({ email, password }: TLoginData) => {
     const data = await loginUserApi({ email, password });
-    if (!data.success) {
-      return data;
-    }
+    if (!data.success) return data;
+    
     setCookie('accessToken', data.accessToken);
+    
     localStorage.setItem('refreshToken', data.refreshToken);
+    
     return data;
   }
 );
