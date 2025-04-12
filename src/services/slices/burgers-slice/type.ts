@@ -1,9 +1,11 @@
 import { TConstructorIngredient, TOrder } from '@utils-types';
-import { TStateError } from '../types';
+import type { TStateError, TStateTypeNull } from '../types';
 
-export type TStateBun = TConstructorIngredient | null;
+// типы для слайса burgers
+
+export type TStateBun = TStateTypeNull<TConstructorIngredient>;
+export type TStateOrderModalData = TStateTypeNull<TOrder>;
 export type TStateIngredients = Array<TConstructorIngredient>;
-export type TStateOrderModalData = TOrder | null;
 type TConstructorState = {
   constructorItems: {
     bun: TStateBun;
