@@ -11,6 +11,9 @@ import {
   setRequest
 } from '../../services/slices/burgers-slice/burgers';
 
+/**
+ * Комопнент для конструктора бургеров
+ */
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const constructorItems = useSelector(getConstructorState);
