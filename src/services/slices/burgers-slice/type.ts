@@ -1,9 +1,5 @@
-import { TConstructorIngredient, TOrder } from '@utils-types';
+import { TStateBun, TStateError, TStateIngredients, TStateOrderModalData } from "../types";
 
-type TStateBun = TConstructorIngredient | null;
-type TStateIngredients = Array<TConstructorIngredient>;
-type TStateOrderModalData = TOrder | null;
-type TStateError = string | null;
 type ConstructorState = {
   constructorItems: {
     bun: TStateBun;
