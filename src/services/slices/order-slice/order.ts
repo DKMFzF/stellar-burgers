@@ -1,17 +1,10 @@
-import { getOrderByNumberApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
+import { getOrderByNumberApi } from '@api';
 import { RootState } from '../../store';
+import { OrderState } from './type';
 
-type OrderState = {
-  orders: TOrder[];
-  getOrderByNumberResponse: TOrder | null;
-  error: string | null;
-  request: boolean;
-  responseOrder: null;
-};
-
-export const initialState: OrderState = {
+// Начальное состояние
+const initialState: OrderState = {
   orders: [],
   getOrderByNumberResponse: null,
   error: null,
@@ -19,32 +12,44 @@ export const initialState: OrderState = {
   responseOrder: null
 };
 
+// Thunk для получения заказа по номеру
 export const getOrderByNumber = createAsyncThunk(
   'order/byNumber',
-  async (number: number) => getOrderByNumberApi(number)
+  async (number: number, { rejectWithValue }) => {
+    try {
+      const response = await getOrderByNumberApi(number);
+      return response;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
 );
 
+// Слайс заказов
 const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getOrderByNumber.pending, (state) => {
-      state.error = null;
-      state.request = true;
-    });
-    builder.addCase(getOrderByNumber.rejected, (state, action) => {
-      state.error = action.error.message as string;
-      state.request = false;
-    });
-    builder.addCase(getOrderByNumber.fulfilled, (state, action) => {
-      state.error = null;
-      state.request = false;
-      state.getOrderByNumberResponse = action.payload.orders[0];
-    });
+    builder
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.error = null;
+        state.request = true;
+      })
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.error = (action.payload as string) ?? 'Unknown error occurred';
+        state.request = false;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.error = null;
+        state.request = false;
+        state.getOrderByNumberResponse = action.payload.orders[0];
+        state.responseOrder = action.payload.orders[0]; // Синхронизация с responseOrder
+      });
   }
 });
 
+// Селектор состояния заказов
 export const getOrderState = (state: RootState): OrderState => state.order;
 
 export const orderReducer = orderSlice.reducer;

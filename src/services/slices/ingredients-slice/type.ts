@@ -1,5 +1,5 @@
-import { TIngredient } from "@utils-types";
-import { StateError } from "../types";
+import { TIngredient } from '@utils-types';
+import { StateError } from '../types';
 
 export interface IngredientsState {
   ingredients: TIngredient[];

@@ -1,5 +1,5 @@
-import { TOrder } from "@utils-types";
-import { StateError } from "../types";
+import { TOrder } from '@utils-types';
+import { StateError } from '../types';
 
 // Интерфейс ответа API для ленты заказов
 export interface IFeedsResponse {

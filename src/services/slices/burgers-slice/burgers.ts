@@ -41,6 +41,7 @@ const moveIngredient = (
   ingredients.splice(to, 0, moved);
 };
 
+// слайс для конструктора бургеров
 const constructorSlice = createSlice({
   name: 'constructor',
   initialState,
