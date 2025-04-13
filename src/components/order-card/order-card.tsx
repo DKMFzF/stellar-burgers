@@ -25,7 +25,10 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
 
     const total = ingredientsInfo.reduce((sum, ing) => sum + ing.price, 0);
     const ingredientsToShow = ingredientsInfo.slice(0, MAX_INGREDIENTS_TO_SHOW);
-    const remains = Math.max(ingredientsInfo.length - MAX_INGREDIENTS_TO_SHOW, 0);
+    const remains = Math.max(
+      ingredientsInfo.length - MAX_INGREDIENTS_TO_SHOW,
+      0
+    );
     const date = new Date(order.createdAt);
 
     return {
