@@ -1,4 +1,3 @@
-// feedSlice.ts
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFeedsApi } from '@api';
 import { RootState } from '../../store';
