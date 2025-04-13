@@ -46,6 +46,12 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+
+    const isEmptyNameOrEmail =
+      formValue.name.trim() === '' || formValue.email.trim() === '';
+
+    if (!isFormChanged || isEmptyNameOrEmail) return;
+
     dispatch(updateUser(formValue))
       .unwrap()
       .then(() => {
