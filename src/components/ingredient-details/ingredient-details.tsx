@@ -1,20 +1,29 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
-import { Params, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { getIngredientState } from '../../services/slices/ingredients-slice/ingredients';
 
+/**
+ * Компонент для отображения деталей ингредиента по ID из URL.
+ */
 export const IngredientDetails: FC = () => {
-  const { id } = useParams<Params>();
+  const { id } = useParams<{ id: string }>();
   const { ingredients, loading, error } = useSelector(getIngredientState);
 
-  const ingredientData = ingredients.find((i) => {
-    if (i._id === id) return i;
-  });
+  // Мемоизация поиска ингредиента по ID
+  const selectedIngredient = useMemo(
+    () => ingredients.find((ingredient) => ingredient._id === id),
+    [ingredients, id]
+  );
 
-  if (!ingredientData || loading) return <Preloader />;
-  if (error) return <Preloader />;
+  if (loading) return <Preloader />;
+  if (error)
+    return <div className='text-center text-red-500'>Ошибка: {error}</div>;
+  if (!selectedIngredient)
+    return <div className='text-center'>Ингредиент не найден</div>;
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  return <IngredientDetailsUI ingredientData={selectedIngredient} />;
 };
