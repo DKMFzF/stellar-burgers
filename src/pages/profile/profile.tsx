@@ -1,86 +1,104 @@
+import { FC, SyntheticEvent, useEffect, useState, useCallback } from 'react';
+import { useSelector, useDispatch } from '../../services/store';
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { useSelector } from '../../services/store';
+import { Preloader } from '@ui';
 import {
   getUser,
   selectUserState,
   updateUser
 } from '../../services/slices/user-Info-slice/user-info';
-import { useDispatch } from '../../services/store';
-import { Preloader } from '@ui';
 
+type ProfileFormState = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+/**
+ * Компонент страницы профиля пользователя
+ */
 export const Profile: FC = () => {
-  const data = useSelector(selectUserState).user;
-  const loading = useSelector(selectUserState).request;
-  const [isFormChanged, setIsFormChanged] = useState(false);
   const dispatch = useDispatch();
+  const { user, request: loading } = useSelector(selectUserState);
 
-  const user = {
-    name: data?.name || '',
-    email: data?.email || ''
-  };
-
-  const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.email,
+  const [formValue, setFormValue] = useState<ProfileFormState>({
+    name: '',
+    email: '',
     password: ''
   });
+  const [isFormChanged, setIsFormChanged] = useState<boolean>(false);
 
+  // Инициализация формы данными пользователя
   useEffect(() => {
-    if (data) {
+    if (user) {
       setFormValue({
-        name: data.name || '',
-        email: data.email || '',
+        name: user.name || '',
+        email: user.email || '',
         password: ''
       });
     }
-  }, [data]);
+  }, [user]);
 
+  // Проверка изменений формы
   useEffect(() => {
-    setIsFormChanged(
-      formValue.name !== user.name ||
-        formValue.email !== user.email ||
-        !!formValue.password
-    );
+    const hasChanges =
+      formValue.name !== user?.name ||
+      formValue.email !== user?.email ||
+      Boolean(formValue.password);
+
+    setIsFormChanged(hasChanges);
   }, [formValue, user]);
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormValue((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    },
+    []
+  );
 
-    const isEmptyNameOrEmail =
-      formValue.name.trim() === '' || formValue.email.trim() === '';
+  const handleCancel = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      if (user) {
+        setFormValue({
+          name: user.name || '',
+          email: user.email || '',
+          password: ''
+        });
+      }
+      setIsFormChanged(false);
+    },
+    [user]
+  );
 
-    if (!isFormChanged || isEmptyNameOrEmail) return;
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
 
-    dispatch(updateUser(formValue))
-      .unwrap()
-      .then(() => {
+      const isNameOrEmailEmpty =
+        !formValue.name.trim() || !formValue.email.trim();
+
+      if (!isFormChanged || isNameOrEmailEmpty) return;
+
+      try {
+        await dispatch(updateUser(formValue)).unwrap();
+        setFormValue((prev) => ({ ...prev, password: '' }));
         setIsFormChanged(false);
-        setFormValue({ ...formValue, password: '' });
         dispatch(getUser());
-      });
-  };
+      } catch (error) {
+        return <>Profile update failed:</>;
+      }
+    },
+    [formValue, isFormChanged, dispatch]
+  );
 
   if (loading) {
     return <Preloader />;
   }
-
-  const handleCancel = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setFormValue({
-      name: user.name,
-      email: user.email,
-      password: ''
-    });
-    setIsFormChanged(false);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
-  };
 
   return (
     <ProfileUI
