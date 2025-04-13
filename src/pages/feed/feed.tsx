@@ -9,7 +9,7 @@ import { AppDispatch } from '../../services/store';
  * Компонент страницы Feed
  */
 export const Feed: FC = () => {
-  const { orders, loading } = useSelector(getFeedState);
+  const { orders, isLoading } = useSelector(getFeedState);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const Feed: FC = () => {
 
   const wrapperGetFeeds = () => dispatch(getFeeds());
 
-  if (loading) return <Preloader />;
+  if (isLoading) return <Preloader />;
 
   return <FeedUI orders={orders} handleGetFeeds={wrapperGetFeeds} />;
 };

@@ -1,35 +1,31 @@
-import { getFeedsApi } from '@api';
+// feedSlice.ts
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
+import { getFeedsApi } from '@api';
 import { RootState } from '../../store';
+import { IFeedsResponse, IFeedState } from './type';
 
-export type TFeedsResponse = {
-  orders: TOrder[];
-  total: number;
-  totalToday: number;
-};
-
-export type FeedState = {
-  orders: TOrder[];
-  total: number;
-  totalToday: number;
-  loading: boolean;
-  error: string | null;
-};
-
-export const initialState: FeedState = {
+// Начальное состояние
+const initialState: IFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
-  loading: false,
+  isLoading: false,
   error: null
 };
 
-export const getFeeds = createAsyncThunk<TFeedsResponse, void>(
-  'feeds/all',
-  getFeedsApi
+// Thunk для загрузки ленты заказов
+export const getFeeds = createAsyncThunk<IFeedsResponse, void>(
+  'feed/fetchAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getFeedsApi();
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
 );
 
+/** Слайс ленты заказов */
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
@@ -37,15 +33,15 @@ const feedSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(getFeeds.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message as string;
+        state.isLoading = false;
+        state.error = action.payload as string;
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = null;
         state.orders = action.payload.orders;
         state.total = action.payload.total;
@@ -54,6 +50,6 @@ const feedSlice = createSlice({
   }
 });
 
-export const getFeedState = (state: RootState): FeedState => state.feed;
+export const getFeedState = (state: RootState) => state.feed;
 
 export const feedReducer = feedSlice.reducer;
