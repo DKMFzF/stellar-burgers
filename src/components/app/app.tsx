@@ -1,6 +1,9 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, Routes, Route } from 'react-router-dom';
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
+import { useDispatch } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredients-slice/ingredients';
+
 import {
   ConstructorPage,
   Feed,
@@ -12,20 +15,24 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
+
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
-import { useDispatch } from '../../services/store';
-import { useEffect } from 'react';
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const backgroundLocation = location.state?.background;
-  const closeModal = () => navigate(-1);
   const dispatch = useDispatch();
 
+  // Сохраняем состояние для корректной работы модальных окон
+  const backgroundLocation = location.state?.background;
+
+  const closeModal = () => {
+    navigate(-1); // Возврат к предыдущему состоянию при закрытии модального окна
+  };
+
   useEffect(() => {
+    // Загружаем данные об ингредиентах при монтировании
     dispatch(getIngredients());
   }, [dispatch]);
 
@@ -33,10 +40,12 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
 
+      {/* Основные маршруты приложения */}
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
 
+        {/* Публичные маршруты (доступны неавторизованным пользователям) */}
         <Route
           path='/login'
           element={
@@ -70,7 +79,7 @@ const App = () => {
           }
         />
 
-        {/* роуты для профиля */}
+        {/* Приватные маршруты (требуют авторизации) */}
         <Route
           path='/profile'
           element={
@@ -88,7 +97,7 @@ const App = () => {
           }
         />
 
-        {/* другие роуты */}
+        {/* Информационные страницы */}
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
@@ -100,11 +109,11 @@ const App = () => {
           }
         />
 
-        {/* роуты для 404 */}
+        {/* Фоллбэк для неизвестных маршрутов */}
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {/* модальные окна */}
+      {/* Модальные окна для отображения поверх основного контента */}
       {backgroundLocation && (
         <Routes>
           <Route
@@ -127,7 +136,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='' onClose={closeModal}>
+                <Modal title='Информация о заказе' onClose={closeModal}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>
