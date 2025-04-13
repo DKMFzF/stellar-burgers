@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getOrderByNumberApi } from '@api';
 import { RootState } from '../../store';
-import { OrderState } from './type';
+import OrderState from './type';
 
 // Начальное состояние
 const initialState: OrderState = {

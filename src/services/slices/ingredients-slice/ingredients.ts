@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../../store';
-import { IngredientsState } from './type';
+import IngredientsState from './type';
 
 // Начальное состояние
 const initialState: IngredientsState = {
