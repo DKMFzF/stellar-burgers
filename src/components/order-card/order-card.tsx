@@ -1,41 +1,33 @@
 import { FC, memo, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
 import { OrderCardUI } from '../ui/order-card';
-import { useSelector } from 'react-redux';
 import { getIngredientState } from '../../services/slices/ingredients-slice/ingredients';
 
-const maxIngredients = 6;
+const MAX_INGREDIENTS_TO_SHOW = 6;
 
+/**
+ * Карточка заказа с информацией об ингредиентах и стоимости.
+ */
 export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
-
   const { ingredients } = useSelector(getIngredientState);
 
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;
 
-    const ingredientsInfo = order.ingredients.reduce(
-      (acc: TIngredient[], item: string) => {
-        const ingredient = ingredients.find((ing) => ing._id === item);
-        if (ingredient) return [...acc, ingredient];
-        return acc;
-      },
-      []
-    );
+    const ingredientsInfo: TIngredient[] = order.ingredients
+      .map((id) => ingredients.find((ing) => ing._id === id))
+      .filter((item): item is TIngredient => Boolean(item));
 
-    const total = ingredientsInfo.reduce((acc, item) => acc + item.price, 0);
-
-    const ingredientsToShow = ingredientsInfo.slice(0, maxIngredients);
-
-    const remains =
-      ingredientsInfo.length > maxIngredients
-        ? ingredientsInfo.length - maxIngredients
-        : 0;
-
+    const total = ingredientsInfo.reduce((sum, ing) => sum + ing.price, 0);
+    const ingredientsToShow = ingredientsInfo.slice(0, MAX_INGREDIENTS_TO_SHOW);
+    const remains = Math.max(ingredientsInfo.length - MAX_INGREDIENTS_TO_SHOW, 0);
     const date = new Date(order.createdAt);
+
     return {
       ...order,
       ingredientsInfo,
@@ -51,7 +43,7 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   return (
     <OrderCardUI
       orderInfo={orderInfo}
-      maxIngredients={maxIngredients}
+      maxIngredients={MAX_INGREDIENTS_TO_SHOW}
       locationState={{ background: location }}
     />
   );
