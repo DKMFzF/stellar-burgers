@@ -25,10 +25,7 @@ const initialState: ConstructorState = {
 // Async thunk для отправки заказа
 export const getOrderBurger = createAsyncThunk(
   'constructor/getOrderBurger',
-  async (ingredientIds: string[]) => {
-    const response = await orderBurgerApi(ingredientIds);
-    return response;
-  }
+  async (data: string[]) => await orderBurgerApi(data)
 );
 
 // Утилита перемещения ингредиентов

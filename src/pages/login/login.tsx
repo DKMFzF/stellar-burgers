@@ -3,7 +3,7 @@ import { LoginUI } from '@ui-pages';
 import { useSelector } from 'react-redux';
 import {
   getLoginUser,
-  getUserState
+  selectUserState
 } from '../../services/slices/user-Info-slice/user-info';
 import { useDispatch } from '../../services/store';
 import { Navigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { Navigate } from 'react-router-dom';
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { error, isAuthenticated } = useSelector(getUserState);
+  const { error, isAuthenticated } = useSelector(selectUserState);
 
   const dispatch = useDispatch();
 

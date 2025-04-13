@@ -13,7 +13,7 @@ import {
   resetModal,
   setRequest
 } from '../../services/slices/burgers-slice/burgers';
-import { getUserState } from '../../services/slices/user-Info-slice/user-info';
+import { selectUserState } from '../../services/slices/user-Info-slice/user-info';
 
 /**
  * Компонент для отображения конструктора бургера.
@@ -26,7 +26,7 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(getConstructorState);
   const orderRequest = useSelector(getOrderRequest);
   const orderModalData = useSelector(getOrderModalData);
-  const isAuthenticated = useSelector(getUserState).isAuthenticated;
+  const isAuthenticated = useSelector(selectUserState).isAuthenticated;
 
   // Формируем массив ID ингредиентов с булкой в начале и в конце
   const ingredientIds = useMemo(() => {
