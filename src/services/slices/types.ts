@@ -1,4 +1,4 @@
-// удобные типы для слайсов
+// Универсальные типы состояния
 
-export type TStateError = string | null;
-export type TStateTypeNull<T> = T | null;
+export type Nullable<T> = T | null;
+export type StateError = Nullable<string>;

@@ -1,20 +1,20 @@
 import { TConstructorIngredient, TOrder } from '@utils-types';
-import type { TStateError, TStateTypeNull } from '../types';
+import { Nullable, StateError } from '../types';
 
-// типы для слайса burgers
-
-export type TStateBun = TStateTypeNull<TConstructorIngredient>;
-export type TStateOrderModalData = TStateTypeNull<TOrder>;
-export type TStateIngredients = Array<TConstructorIngredient>;
-type TConstructorState = {
-  constructorItems: {
-    bun: TStateBun;
-    ingredients: TStateIngredients;
-  };
-  orderRequest: boolean;
-  orderModalData: TStateOrderModalData;
-  loading: boolean;
-  error: TStateError;
+export type BunState = Nullable<TConstructorIngredient>;
+export type OrderModalData = Nullable<TOrder>;
+export type IngredientsState = TConstructorIngredient[];
+export type ConstructorItemsState = {
+  bun: BunState;
+  ingredients: IngredientsState;
 };
 
-export default TConstructorState;
+export interface ConstructorState {
+  constructorItems: ConstructorItemsState;
+  orderRequest: boolean;
+  orderModalData: OrderModalData;
+  loading: boolean;
+  error: StateError;
+}
+
+export default ConstructorState;

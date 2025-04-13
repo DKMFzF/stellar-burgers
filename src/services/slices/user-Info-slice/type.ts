@@ -1,15 +1,15 @@
 import { TRegisterData } from '@api';
 import { TOrder, TUser } from '@utils-types';
-import type { TStateError, TStateTypeNull } from '../types';
+import type { StateError, Nullable } from '../types';
 
 // типы для слайса user-info
 
-type TUserStateResponse = TStateTypeNull<TUser>;
-type TUserStateRegisterData = TStateTypeNull<TRegisterData>;
-type TUserStateAtr = TStateTypeNull<TUser>;
+type TUserStateResponse = Nullable<TUser>;
+type TUserStateRegisterData = Nullable<TRegisterData>;
+type TUserStateAtr = Nullable<TUser>;
 export type TUserState = {
   request: boolean;
-  error: TStateError;
+  error: StateError;
   response: TUserStateResponse;
   registerData: TUserStateRegisterData;
   user: TUserStateAtr;
