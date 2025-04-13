@@ -25,7 +25,7 @@ export const getFeeds = createAsyncThunk<IFeedsResponse, void>(
   }
 );
 
-/** Слайс ленты заказов */
+// слайс ленты заказов
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
