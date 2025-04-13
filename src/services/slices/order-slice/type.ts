@@ -10,4 +10,4 @@ type OrderState = {
   responseOrder: OrderNullable;
 };
 
-export default OrderState
+export default OrderState;

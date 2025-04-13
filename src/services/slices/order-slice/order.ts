@@ -15,14 +15,7 @@ const initialState: OrderState = {
 // Thunk для получения заказа по номеру
 export const getOrderByNumber = createAsyncThunk(
   'order/byNumber',
-  async (number: number, { rejectWithValue }) => {
-    try {
-      const response = await getOrderByNumberApi(number);
-      return response;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  }
+  async (number: number) => getOrderByNumberApi(number)
 );
 
 // Слайс заказов

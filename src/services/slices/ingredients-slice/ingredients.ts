@@ -14,13 +14,7 @@ const initialState: IngredientsState = {
 // Thunk для загрузки ингредиентов
 export const getIngredients = createAsyncThunk<TIngredient[], void>(
   'ingredients/getAll',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await getIngredientsApi();
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  }
+  getIngredientsApi
 );
 
 // Слайс ингредиентов

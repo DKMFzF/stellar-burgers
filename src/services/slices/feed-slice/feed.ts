@@ -15,13 +15,7 @@ const initialState: IFeedState = {
 // Thunk для загрузки ленты заказов
 export const getFeeds = createAsyncThunk<IFeedsResponse, void>(
   'feed/fetchAll',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await getFeedsApi();
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  }
+  getFeedsApi
 );
 
 // слайс ленты заказов
