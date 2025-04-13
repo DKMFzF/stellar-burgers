@@ -68,5 +68,7 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
+  console.log(orderInfo.name);
+
   return <OrderInfoUI orderInfo={orderInfo} />;
 };
