@@ -1,6 +1,9 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient } from '@utils-types';
+import { useNavigate } from 'react-router-dom';
+
 import { BurgerConstructorUI } from '@ui';
+import { TConstructorIngredient } from '@utils-types';
+
 import { useDispatch, useSelector } from '../../services/store';
 import {
   getConstructorState,
@@ -10,40 +13,42 @@ import {
   resetModal,
   setRequest
 } from '../../services/slices/burgers-slice/burgers';
-import { useNavigate } from 'react-router-dom';
 import { getUserState } from '../../services/slices/user-Info-slice/user-info';
 
 /**
- * Комопнент для конструктора бургеров
+ * Компонент для отображения конструктора бургера.
+ * Управляет логикой формирования заказа и модального окна.
  */
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const constructorItems = useSelector(getConstructorState);
-
   const orderRequest = useSelector(getOrderRequest);
-
   const orderModalData = useSelector(getOrderModalData);
-
   const isAuthenticated = useSelector(getUserState).isAuthenticated;
 
-  let arr: string[] = [];
-  const ingredients: string[] | void = constructorItems.ingredients.map(
-    (i) => i._id
-  );
-  if (constructorItems.bun) {
-    const bun = constructorItems.bun?._id;
-    arr = [bun, ...ingredients, bun];
-  }
+  // Формируем массив ID ингредиентов с булкой в начале и в конце
+  const ingredientIds = useMemo(() => {
+    if (!constructorItems.bun) return [];
+    const bunId = constructorItems.bun._id;
+    const ingredientIds = constructorItems.ingredients.map((i) => i._id);
+    return [bunId, ...ingredientIds, bunId];
+  }, [constructorItems]);
+
   const onOrderClick = () => {
-    if (constructorItems.bun && isAuthenticated) {
-      dispatch(setRequest(true));
-      dispatch(getOrderBurger(arr));
-    } else if (!constructorItems.bun && isAuthenticated) {
-      return;
-    } else if (!isAuthenticated) {
+    if (!isAuthenticated) {
       navigate('/login');
+      return;
     }
+
+    if (!constructorItems.bun) {
+      // Можно показать уведомление "Выберите булку"
+      return;
+    }
+
+    dispatch(setRequest(true));
+    dispatch(getOrderBurger(ingredientIds));
   };
 
   const closeOrderModal = () => {
@@ -51,19 +56,18 @@ export const BurgerConstructor: FC = () => {
     dispatch(resetModal());
   };
 
-  const price = useMemo(
-    () =>
-      (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
-      constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
-        0
-      ),
-    [constructorItems]
-  );
+  const totalPrice = useMemo(() => {
+    const bunPrice = constructorItems.bun ? constructorItems.bun.price * 2 : 0;
+    const ingredientsPrice = constructorItems.ingredients.reduce(
+      (sum: number, item: TConstructorIngredient) => sum + item.price,
+      0
+    );
+    return bunPrice + ingredientsPrice;
+  }, [constructorItems]);
 
   return (
     <BurgerConstructorUI
-      price={price}
+      price={totalPrice}
       orderRequest={orderRequest}
       constructorItems={constructorItems}
       orderModalData={orderModalData}
