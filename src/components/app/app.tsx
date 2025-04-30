@@ -18,6 +18,7 @@ import {
 
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
+import { getCheckUser } from '../../services/slices/user-Info-slice/user-info';
 
 const App = () => {
   const location = useLocation();
@@ -32,8 +33,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    // Загружаем данные об ингредиентах при монтировании
+    // Загружаем данные об ингредиентах при монтировании и о Юзере
     dispatch(getIngredients());
+    dispatch(getCheckUser());
   }, [dispatch]);
 
   return (

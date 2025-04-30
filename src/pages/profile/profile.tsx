@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from '../../services/store';
 import { ProfileUI } from '@ui-pages';
 import { Preloader } from '@ui';
 import {
-  getUser,
+  getCheckUser,
   selectUserState,
   updateUser
 } from '../../services/slices/user-Info-slice/user-info';
@@ -88,7 +88,7 @@ export const Profile: FC = () => {
         await dispatch(updateUser(formValue)).unwrap();
         setFormValue((prev) => ({ ...prev, password: '' }));
         setIsFormChanged(false);
-        dispatch(getUser());
+        dispatch(getCheckUser());
       } catch (error) {
         return <>Profile update failed:</>;
       }

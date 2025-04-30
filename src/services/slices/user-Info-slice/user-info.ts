@@ -40,7 +40,7 @@ export const getLoginUser = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
+export const getCheckUser = createAsyncThunk(
   'users/getUser',
   async (_, { rejectWithValue }) => {
     try {
@@ -134,14 +134,14 @@ export const userSlice = createSlice({
       })
 
       // Получение данных пользователя
-      .addCase(getUser.pending, (state) => {
+      .addCase(getCheckUser.pending, (state) => {
         state.isAuthChecked = false;
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getCheckUser.rejected, (state) => {
         state.isAuthChecked = true;
         state.isAuthenticated = false;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getCheckUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
         state.isAuthenticated = true;
