@@ -110,7 +110,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
+        
         {/* Фоллбэк для неизвестных маршрутов */}
         <Route path='*' element={<NotFound404 />} />
       </Routes>
