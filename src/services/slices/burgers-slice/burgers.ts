@@ -11,7 +11,7 @@ import { RootState } from '../../store';
 import { orderBurgerApi } from '@api';
 
 // Начальное состояние
-const initialState: ConstructorState = {
+export const initialState: ConstructorState = {
   constructorItems: {
     bun: null,
     ingredients: []

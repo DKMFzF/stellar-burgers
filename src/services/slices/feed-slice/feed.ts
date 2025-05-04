@@ -4,7 +4,7 @@ import { RootState } from '../../store';
 import { IFeedsResponse, IFeedState } from './type';
 
 // Начальное состояние
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
