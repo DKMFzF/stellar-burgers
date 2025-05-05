@@ -6,8 +6,12 @@ describe('Тестирование модальных окон', () => {
   afterEach(cleanTestEnvironment);
 
   it('Открытие модального окна', () => {
+    cy.get(selectors.modalComponent).should('not.exist');
     cy.get(selectors.bunComponent).click();
     cy.get(selectors.modalComponent).should('be.visible');
+    cy.get(selectors.modalComponent).within(() => {
+      cy.contains('Краторная булка N-200i').should('be.visible');
+    });
   });
   
   it('Закрытие модального окна по крестику', () => {
